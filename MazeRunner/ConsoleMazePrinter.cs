@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace MazeRunner.Console
+namespace MazeRunner
 {
     class ConsoleMazePrinter : IMazePrinter
     {
@@ -17,22 +13,42 @@ namespace MazeRunner.Console
 
         public void Print(int[,] labyrinth)
         {
-            for(int i = 0; i < MazeToPrint.M; i++)
+            for (int i = 0; i < MazeToPrint.M; i++)
             {
-                for(int j = 0; j < MazeToPrint.N; j++)
+                for (int j = 0; j < MazeToPrint.N; j++)
                 {
                     if (MazeToPrint.StartPoint == (i, j))
-                        System.Console.Write("A");
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.Write("AA");
+                    }
                     else if (MazeToPrint.EndPoint == (i, j))
-                        System.Console.Write("B");
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.Write("BB");
+                    }
                     else if (labyrinth[i, j] == -1)
-                        System.Console.Write("-");
+                    {
+                        Console.Write("██");
+                    }
                     else if (labyrinth[i, j] > 0)
-                        System.Console.Write("X");
+                    {
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.Write("██");
+                    }
+                    else if (labyrinth[i, j] == 0)
+                    {
+                        Console.Write("  ");
+                    }
                     else
-                        System.Console.Write(labyrinth[i, j]);
+                    {
+                        throw new NotImplementedException();
+                    }
+
+                    Console.ResetColor();
                 }
-                System.Console.Write('\n');
+
+                Console.WriteLine();
             }
         }
     }

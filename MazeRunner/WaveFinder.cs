@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-namespace MazeRunner.Console
+namespace MazeRunner
 {
     class WaveFinder : IWayFinder
     {
-        private int amountOfPointsUncovered;
+        private int _amountOfPointsUncovered;
         private Queue<(int, int)> queue;
         public Maze MazeToFindWay { get; set; }
         public int[,] Labyrinth { get; set; }
@@ -18,14 +14,14 @@ namespace MazeRunner.Console
         {
             MazeToFindWay = mazeToFindWay;
             Labyrinth = (int[,])MazeToFindWay.Labyrinth.Clone();
-            amountOfPointsUncovered = MazeToFindWay.M * MazeToFindWay.N - MazeToFindWay.Blocks.Length;
+            _amountOfPointsUncovered = MazeToFindWay.M * MazeToFindWay.N - MazeToFindWay.Blocks.Length;
             queue = new Queue<(int, int)>();
         }
 
         public void FindWay()
         {
             queue.Enqueue(MazeToFindWay.StartPoint);
-            while(amountOfPointsUncovered>0 
+            while(_amountOfPointsUncovered>0 
                 && Labyrinth[MazeToFindWay.EndPoint.Item1, MazeToFindWay.EndPoint.Item2] == 0)
             {
                 MarkNeighbours(queue.Dequeue());
@@ -60,7 +56,7 @@ namespace MazeRunner.Console
                 Labyrinth[point.Item1, point.Item2] == 0)
             {
                 Labyrinth[point.Item1, point.Item2] = mark;
-                amountOfPointsUncovered--;
+                _amountOfPointsUncovered--;
                 queue.Enqueue(point);
             }
         }

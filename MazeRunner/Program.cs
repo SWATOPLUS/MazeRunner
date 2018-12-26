@@ -1,23 +1,32 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace MazeRunner.Console
+namespace MazeRunner
 {
-    class Program
+    internal static class Program
     {
-        static void Main(string[] args)
+        private static void Main()
         {
-            Maze greatMaze = new Maze(36, 32);
+            var greatMaze = new Maze(36, 32);
             IMazePrinter consolePrinter = new ConsoleMazePrinter(greatMaze);
             consolePrinter.Print(greatMaze.Labyrinth);
-            IWayFinder waveFinder = new WaveFinder(greatMaze);
-            waveFinder.FindWay();
-            System.Console.WriteLine("------------------------------------");
+
+            IWayFinder waveFinder;
+
+            try
+            {
+                waveFinder = new WaveFinder(greatMaze);
+                waveFinder.FindWay();
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Path not found");
+                return;
+            }
+
+            Console.WriteLine("------------------------------------");
             consolePrinter.Print(greatMaze.Labyrinth);
-            System.Console.WriteLine("Route Length = " + waveFinder.Length);
+            Console.WriteLine("Route Length = " + waveFinder.Length);
         }
     }
 }
+
