@@ -2,6 +2,6 @@
 {
     interface IMazePrinter
     {
-        void Print(int[,] labyrinth);
+        void Print(MazeCellType[,] cells);
     }
 }

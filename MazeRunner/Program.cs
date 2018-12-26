@@ -7,8 +7,8 @@ namespace MazeRunner
         private static void Main()
         {
             var greatMaze = new Maze(36, 32);
-            IMazePrinter consolePrinter = new ConsoleMazePrinter(greatMaze);
-            consolePrinter.Print(greatMaze.Labyrinth);
+            IMazePrinter consolePrinter = new ConsoleMazePrinter();
+            consolePrinter.Print(greatMaze.Cells);
 
             IWayFinder waveFinder;
 
@@ -24,7 +24,7 @@ namespace MazeRunner
             }
 
             Console.WriteLine("------------------------------------");
-            consolePrinter.Print(greatMaze.Labyrinth);
+            consolePrinter.Print(greatMaze.Cells);
             Console.WriteLine("Route Length = " + waveFinder.Length);
         }
     }

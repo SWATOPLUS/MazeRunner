@@ -1,55 +1,63 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace MazeRunner
 {
-    class Maze
+    public class Maze
     {
-        public int M { get; set; }
-        public int N { get; set; }
-        public (int, int)[] Blocks { get; set; }
+        private static Random Random { get; } = new Random();
+
+        public int Rows { get; }
+        public int Columns { get; }
+        public (int, int)[] Walls { get; set; }
         public (int, int) StartPoint { get; set; }
         public (int, int) EndPoint { get; set; }
-        public int[,] Labyrinth { get; set; }
+        public MazeCellType[,] Cells { get; }
 
-        public Maze(int m, int n)
+        public Maze(int rows, int columns)
         {
-            M = m;
-            N = n;
-            Labyrinth = new int[m,n];
+            Rows = rows;
+            Columns = columns;
+            Cells = new MazeCellType[rows,columns];
             InitializeBlocks();
             InitializeStartAndEndPoints();
         }
 
         private void InitializeBlocks()
         {
-            var amountOfBlocks = (int)Math.Ceiling((double)N * N * M / 100);
-            Blocks = new (int, int)[amountOfBlocks];
+            var amountOfBlocks = (int)Math.Ceiling((double)Columns * Columns * Rows / 100);
+            Walls = new (int, int)[amountOfBlocks];
             for (int l = 0; l < amountOfBlocks; l++)
             {
-                var point = RandomPoint();
-                Labyrinth[point.Item1, point.Item2] = -1;
-                Blocks[l] = point;
+                var point = RandomEmptyPoint();
+                Cells[point.Item1, point.Item2] = MazeCellType.Wall;
+                Walls[l] = point;
             }
         }
 
         private void InitializeStartAndEndPoints()
         {
-            EndPoint = RandomPoint();
-            StartPoint = RandomPoint();
+            EndPoint = RandomEmptyPoint();
+            StartPoint = RandomEmptyPoint();
+            Cells[EndPoint.Item1, EndPoint.Item2] = MazeCellType.Finish;
+            Cells[StartPoint.Item1, StartPoint.Item2] = MazeCellType.Start;
         }
 
-        private (int,int) RandomPoint()
+        private (int, int) RandomEmptyPoint()
         {
-            Random rand = new Random();
-            var i = rand.Next(M);
-            var j = rand.Next(N);
-            while (Labyrinth[i, j] == -1 || (i,j) == StartPoint || (i,j) == EndPoint)
-            {
-                i = rand.Next(M);
-                j = rand.Next(N);
-            }
-            return (i, j);
-        }
+            var emptyCells = new List<(int, int)>(Cells.Length);
 
+            foreach (var x in Enumerable.Range(0, Rows))
+            foreach (var y in Enumerable.Range(0, Columns))
+            {
+                if (Cells[x, y] == MazeCellType.Empty)
+                {
+                    emptyCells.Add((x, y));
+                }
+            }
+
+            return emptyCells[Random.Next(emptyCells.Count)];
+        }
     }
 }

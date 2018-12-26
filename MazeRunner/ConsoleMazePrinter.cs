@@ -2,47 +2,42 @@
 
 namespace MazeRunner
 {
-    class ConsoleMazePrinter : IMazePrinter
+    public class ConsoleMazePrinter : IMazePrinter
     {
-        public Maze MazeToPrint { get; set; }
-
-        public ConsoleMazePrinter(Maze mazeToPrint)
+        public void Print(MazeCellType[,] cells)
         {
-            MazeToPrint = mazeToPrint;
-        }
-
-        public void Print(int[,] labyrinth)
-        {
-            for (int i = 0; i < MazeToPrint.M; i++)
+            for (var i = 0; i < cells.GetLength(0); i++)
             {
-                for (int j = 0; j < MazeToPrint.N; j++)
+                for (var j = 0; j < cells.GetLength(1); j++)
                 {
-                    if (MazeToPrint.StartPoint == (i, j))
+                    switch (cells[i, j])
                     {
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.Write("AA");
-                    }
-                    else if (MazeToPrint.EndPoint == (i, j))
-                    {
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.Write("BB");
-                    }
-                    else if (labyrinth[i, j] == -1)
-                    {
-                        Console.Write("██");
-                    }
-                    else if (labyrinth[i, j] > 0)
-                    {
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        Console.Write("██");
-                    }
-                    else if (labyrinth[i, j] == 0)
-                    {
-                        Console.Write("  ");
-                    }
-                    else
-                    {
-                        throw new NotImplementedException();
+                        case MazeCellType.Start:
+
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.Write("AA");
+                            break;
+
+                        case MazeCellType.Finish:
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.Write("BB");
+                            break;
+
+                        case MazeCellType.Wall:
+                            Console.Write("██");
+                            break;
+
+                        case MazeCellType.Path:
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.Write("██");
+                            break;
+
+                        case MazeCellType.Empty:
+                            Console.Write("  ");
+                            break;
+
+                        default:
+                            throw new NotImplementedException();
                     }
 
                     Console.ResetColor();
